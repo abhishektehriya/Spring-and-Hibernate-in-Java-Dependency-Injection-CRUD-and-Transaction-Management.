@@ -1,0 +1,5 @@
+<form action="EmployeeServlet" method="get">
+    <label>Search Employee by ID:</label>
+    <input type="text" name="empId">
+    <input type="submit" value="Search">
+</form>
