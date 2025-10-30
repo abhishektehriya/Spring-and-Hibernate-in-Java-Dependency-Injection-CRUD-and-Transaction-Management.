@@ -1,0 +1,33 @@
+@WebServlet("/AttendanceServlet")
+public class AttendanceServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        String studentId = request.getParameter("studentId");
+        String date = request.getParameter("date");
+        String status = request.getParameter("status");
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/school_db", "root", "yourpassword");
+
+            PreparedStatement ps = con.prepareStatement(
+                "INSERT INTO Attendance (StudentID, Date, Status) VALUES (?, ?, ?)");
+            ps.setString(1, studentId);
+            ps.setString(2, date);
+            ps.setString(3, status);
+            ps.executeUpdate();
+
+            out.println("<h2>Attendance recorded successfully!</h2>");
+            out.println("<p>Student ID: " + studentId + "</p>");
+            out.println("<p>Date: " + date + "</p>");
+            out.println("<p>Status: " + status + "</p>");
+            con.close();
+        } catch (Exception e) {
+            out.println("<h3>Error: " + e.getMessage() + "</h3>");
+        }
+    }
+}
